@@ -1,14 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Util = require('util');
-const { config, ENVIRONMENT } = require('./config');
+const { api } = require('./app/config');
 const logger = require('./app/logger');
 const routes = require('./app/routes');
 
 const init = () => {
+  const ENVIRONMENT = process.env.NODE_ENV || 'testing';
   // Set up the express app
   const app = express();
-  const port = config.api.port || 8080;
+  const port = api.port || 8080;
   // Parse incoming requests data (https://github.com/expressjs/body-parser)
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
