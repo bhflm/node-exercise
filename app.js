@@ -21,7 +21,7 @@ const init = () => {
   }
 
   module.exports = app;
-  console.info(`🚀BIG CORP API - ${ENVIRONMENT} - RUNNING @ PORT:${port}`); // eslint-disable-line
+  logger.info(`BIG CORP API - ENV: ${ENVIRONMENT} RUNNING @ PORT:${port}`); // eslint-disable-line
 };
 
 init();
