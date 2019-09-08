@@ -2,8 +2,9 @@ const Util = require('util');
 const logger = require('../logger');
 const employeesService = require('../services/employees');
 
-exports.getList = async (req, res) => {
+exports.getList = (req, res) => {
   logger.info(`Employees list request with query params ${Util.inspect(req.query, { depth: null })}`);
+  console.log('query: ', req.query);
   return employeesService.getList(req.query)
     .then(response => res.json(response.data))
     .catch(err => {
@@ -12,7 +13,7 @@ exports.getList = async (req, res) => {
     });
 };
 
-exports.getDetail = async (req, res) => {
+exports.getDetail = (req, res) => {
   logger.info(`Employee detail request with params
     ${Util.inspect({ params: req.params, query: req.query }, { depth: null })}`);
   //TODO: api/{resource}/:id is broken, {missing auth token}
