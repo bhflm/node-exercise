@@ -5,7 +5,7 @@ const request = require('supertest'),
   { employeesMock } = require('../mocks');
 
 describe('Employees tests', () => {
-  test('Get employees with status = 200', done => {
+  test('Get employees list with status = 200', done => {
 
   nock(API.BigCorp)
     .get('/employees')
@@ -25,4 +25,14 @@ describe('Employees tests', () => {
         done();
       });
   });
+
+  // test('Get employees with query with limit 15', done => {
+  //
+  //   nock(API.BigCorp)
+  //     .get('/employees')
+  //     .query( {limit: 15})
+  //     .reply(200, { data: employeesMock });
+  //
+  // })
+
 });
