@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Util = require('util');
-const config = require('./src/config');
-const logger = require('./src/logger');
-const routes = require('./src/routes');
+const config = require('./app/config');
+const logger = require('./app/logger');
+const routes = require('./app/routes');
 
 const init = () => {
   const ENVIRONMENT = config.ENV || 'development';
