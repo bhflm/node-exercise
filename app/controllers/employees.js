@@ -4,7 +4,6 @@ const employeesService = require('../services/employees');
 
 exports.getList = (req, res) => {
   logger.info(`Employees list request with query params ${Util.inspect(req.query, { depth: null })}`);
-  console.log('query: ', req.query);
   return employeesService.getList(req.query)
     .then(response => res.json(response.data))
     .catch(err => {

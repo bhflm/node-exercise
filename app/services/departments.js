@@ -1,5 +1,3 @@
 const departments = require('../models/departments');
 
-exports.getDepartment = () => {
-  console.log('dpeartments: ', departments);
-};
+exports.getDepartment = id => departments.find(each => each.id === id);
