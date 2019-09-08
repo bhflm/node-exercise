@@ -8,7 +8,7 @@ exports.getList = async (req, res) => {
     .then(response => res.json(response.data))
     .catch(err => {
       logger.error(err);
-      return err;
+      return res.status(400).send(err);
     });
 };
 
@@ -21,6 +21,6 @@ exports.getDetail = async (req, res) => {
     .then(response => res.json(response.data))
     .catch(err => {
       logger.error(err);
-      return err;
+      return res.status(400).send(err);
     });
 };

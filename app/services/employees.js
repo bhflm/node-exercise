@@ -7,8 +7,8 @@ const { API } = require('../config');
 exports.getList = params => {
   const queryOptions = params ? pickBy(params) : {};
   const query = `?${queryString.stringify(queryOptions)}`;
-  return axios.get(`${API.BigCorp}/employees${query}`).catch(err => Promise.reject(err));
+  return axios.get(`${API.BigCorp}/employees${query}`);
 };
 
 exports.getDetail = params =>
-  axios.get(`${API.BigCorp}/employees/?${params}`).catch(err => Promise.reject(err));
+  axios.get(`${API.BigCorp}/employees/?${params}`);

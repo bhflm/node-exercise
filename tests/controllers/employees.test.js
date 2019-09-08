@@ -4,6 +4,16 @@ const request = require('supertest'),
   { API } = require('../../app/config');
 
 describe('Employees tests', () => {
+  test('Dont get employees but receive error', done => {
+    return request(server)
+      .get('/employees?id=a')
+      .end((err, res) => {
+        expect(res.error).toHaveProperty('text');
+        expect(res.error).toHaveProperty('status');
+        expect(res.error.status).toBe(400);
+        done();
+      });
+  });
   test('Get employees list with status = 200', done => {
     return request(server)
       .get('/employees')
