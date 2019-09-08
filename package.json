@@ -37,7 +37,7 @@
     "express": "^4.16.4",
     "factory-girl": "^5.0.4",
     "jwt-simple": "^0.5.5",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "nock": "^11.3.3",

@@ -19,15 +19,26 @@ describe('Employees tests', () => {
         done();
       });
   });
-
-  test('Get employees with query with limit 15', done => {
-      return request(server)
-        .get('/employees?limit=15')
-        .end((err, res) => {
-          expect(res.body.length).toBe(15);
-          expect(res.status).toBe(200);
-          done();
-        });
-  })
-
+  test('Get two employees from list with id 4 & 6', done => {
+    return request(server)
+      .get('/employees?id=4&id=6')
+      .end((err, res) => {
+        expect(res.body[0]).toHaveProperty('id');
+        expect(res.body[0].id).toBe(4);
+        expect(res.body[1]).toHaveProperty('id');
+        expect(res.body[1].id).toBe(6);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
+  test('Get one employee with id 4', done => {
+    return request(server)
+      .get('/employees/4')
+      .end((err, res) => {
+        expect(res.body[0]).toHaveProperty('id');
+        expect(res.body[0].id).toBe(4);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
 });

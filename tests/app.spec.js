@@ -1,3 +1,4 @@
+/* eslint import/no-dynamic-require: 0 */
 const fs = require('fs');
 const path = require('path');
 
