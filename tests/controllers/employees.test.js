@@ -1,14 +1,27 @@
-const server = require('../../app'),
-  request = require('supertest'),
-  { expect } = require('chai');
+const request = require('supertest'),
+  nock = require('nock'),
+  server = require('../../app'),
+  { API } = require('../../app/config'),
+  { employeesMock } = require('../mocks');
 
 describe('Employees tests', () => {
-  test('have restaurants with needed properties', done => {
-    request(server)
+  test('Get employees with status = 200', done => {
+
+  nock(API.BigCorp)
+    .get('/employees')
+    .reply(200, { data: employeesMock });
+
+    return request(server)
       .get('/employees')
       .end((err, res) => {
-        console.log('res: ', res);
-        expect(res.status).to.equal(200);
+        expect(res.body.data.length).not.toBe(0);
+        expect(res.body.data[0]).toHaveProperty('first');
+        expect(res.body.data[0]).toHaveProperty('last');
+        expect(res.body.data[0]).toHaveProperty('id');
+        expect(res.body.data[0]).toHaveProperty('manager');
+        expect(res.body.data[0]).toHaveProperty('department');
+        expect(res.body.data[0]).toHaveProperty('office');
+        expect(res.status).toBe(200);
         done();
       });
   });
