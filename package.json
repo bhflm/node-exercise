@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/bhflm/bigcorp-api#readme",
   "dependencies": {
+    "axios": "^0.19.0",
     "babel-eslint": "^10.0.1",
     "basic-auth": "^2.0.1",
     "bcryptjs": "^2.4.3",
