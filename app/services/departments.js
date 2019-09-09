@@ -1,3 +1,4 @@
-const departments = require('../models/departments');
+const DepartmentsSingleton = require('../models/departments'),
+  departments = new DepartmentsSingleton();
 
-exports.getDepartment = id => departments.find(each => each.id === id);
+exports.getDepartment = id => departments.fetchOne(id);
