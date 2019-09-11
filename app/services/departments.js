@@ -1,6 +1,6 @@
-const DepartmentsSingleton = require('../models/departments'),
-  departments = new DepartmentsSingleton(),
-  { compact } = require('lodash');
+const { compact } = require('lodash'),
+  DepartmentsSingleton = require('../models/departments'),
+  departments = new DepartmentsSingleton();
 
 exports.getDepartment = id => departments.fetchOne(id);
 

@@ -42,14 +42,17 @@ const getResourceData = {
 const getResourcesData = (data, resource, { nestedPath, levelsDeep }) => {
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
   const resourcesIds = compact(uniq(data.map(each => get(each, nestedRelation))));
-  return getResourceData[resource]({ id: resourcesIds }).then(response => {
-    const resourcesHash = arrayAsObj(response, 'id');
-    const expandedData = data.map(each => {
-      if (resourcesHash[get(each, nestedRelation)]) set(each, nestedRelation, resourcesHash[get(each, nestedRelation)]);
-      return each;
+  return getResourceData[resource]({ id: resourcesIds })
+    .then(response => {
+      const resourcesHash = arrayAsObj(response, 'id');
+      const expandedData = data.map(each => {
+        if (resourcesHash[get(each, nestedRelation)])
+          set(each, nestedRelation, resourcesHash[get(each, nestedRelation)]);
+        return each;
+      });
+      return expandedData;
     })
-    return expandedData;
-  }).catch(err => Promise.reject(err));
+    .catch(err => Promise.reject(err));
 };
 
 const expandResource = {
@@ -76,9 +79,9 @@ const assignNested = (each, resourceKey, nestedResources) => {
   return { ...each, [resourceKey]: nestedResources[resourceId] };
 };
 
-exports.expandRelation = async (data, expands) => {
+exports.expandRelation = async (data, expands, pagination) => {
   const resourcesToExpand = expands.split('.');
   const originalPath = Object.assign({}, { nestedPath: expands.split('.'), levelsDeep: 1 });
-  const expandedData = await nestResourcesInfo(originalPath, resourcesToExpand, data);
+  let expandedData = await nestResourcesInfo(originalPath, resourcesToExpand, data);
   return expandedData;
 };

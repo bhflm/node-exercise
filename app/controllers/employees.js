@@ -6,7 +6,7 @@ exports.getList = (req, res) => {
   logger.info(`Employees list request with query params ${Util.inspect(req.query, { depth: null })}`);
   return employeesService
     .getList(req.query)
-    .then(response => res.json({ response: response.data} ))
+    .then(response => res.json({ response: response.data }))
     .catch(errResponse => {
       logger.error(errResponse.erorr);
       return res.status(400).send(errResponse.error);
