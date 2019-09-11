@@ -35,11 +35,13 @@ const getManagersData = (data, { nestedPath, levelsDeep }) => {
 const getDepartmentsData = (data, { nestedPath, levelsDeep }) => {
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
   const departmentsIds = compact(uniq(data.map(each => get(each, nestedPath))));
-  console.log('DEPARTMENTS IDS: ', departmentsIds);
   return getResourceData.department({ id: departmentsIds }).then(departmentsResponse => {
-    console.log('DEPARTMENTS RESPONSE: ', departmentsResponse);
     const departmentsHash = arrayAsObj(departmentsResponse, 'id');
-    return data;
+    const expandedData = data.map(each => {
+      if (departmentsHash[get(each, nestedRelation)]) set(each, nestedRelation, departmentsHash[get(each, nestedRelation)]);
+      return each;
+    })
+    return expandedData;
   });
 };
 

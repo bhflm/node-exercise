@@ -4,8 +4,8 @@ const DepartmentsSingleton = require('../models/departments'),
 
 exports.getDepartment = id => departments.fetchOne(id);
 
-exports.getMultipleDepartments = ids =>
+exports.getMultipleDepartments = ({ id }) =>
   new Promise((resolve, reject) => {
-    const bulkDepartments = ids.map(id => departments.fetchOne(id));
+    const bulkDepartments = id.map(id => departments.fetchOne(id));
     return bulkDepartments ? resolve(bulkDepartments) : reject(new Error('Could not fetch departments'));
   });

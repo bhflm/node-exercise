@@ -8,8 +8,7 @@ exports.getList = (req, res) => {
     .getList(req.query)
     .then(response => res.json({ response: response.data} ))
     .catch(errResponse => {
-      console.log('ERR: ', errResponse);
-      // logger.error(errResponse.erorr);
+      logger.error(errResponse.erorr);
       return res.status(400).send(errResponse.error);
     });
 };
