@@ -32,39 +32,31 @@ const getManagersData = (data, { nestedPath, levelsDeep }) => {
     .catch(err => Promise.reject(err));
 };
 
-const getDepartmentsData = (data, { nestedPath, levelsDeep }) => {
+const getResourcesData = (data, resource, { nestedPath, levelsDeep }) => {
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
-  const departmentsIds = compact(uniq(data.map(each => get(each, nestedPath))));
-  return getResourceData.department({ id: departmentsIds }).then(departmentsResponse => {
-    const departmentsHash = arrayAsObj(departmentsResponse, 'id');
+  const resourcesIds = compact(uniq(data.map(each => get(each, nestedPath))));
+  return getResourceData[resource]({ id: resourcesIds }).then(response => {
+    const resourcesHash = arrayAsObj(response, 'id');
     const expandedData = data.map(each => {
-      if (departmentsHash[get(each, nestedRelation)]) set(each, nestedRelation, departmentsHash[get(each, nestedRelation)]);
+      if (resourcesHash[get(each, nestedRelation)]) set(each, nestedRelation, resourcesHash[get(each, nestedRelation)]);
       return each;
     })
     return expandedData;
   });
 };
 
-const getOfficesData = (data, { nestedPath, levelsDeep }) => {
-  const officesIds = data.map(each => {
-    each.office;
-  });
-  const officesData = officesIds.map(office => officesService.getOffice(office.id) || null);
-  return officesData;
-};
-
 const getResourceData = {
   department: id => departmentsService.getMultipleDepartments(id),
-  office: id => officesService.getOffice(id),
+  office: id => officesService.getMultipleOffices(id),
   superdepartment: id => departmentsService.getDepartment(id),
   manager: ids => employeesService.getList(ids)
 };
 
 const expandResource = {
-  department: (data, path) => getDepartmentsData(data, path),
-  superdepartment: (data, path) => getDepartmentsData(data, path),
+  department: (data, path) => getResourcesData(data, 'department', path),
+  superdepartment: (data, path) => getResourcesData(data, 'department', path),
   manager: (data, path) => getManagersData(data, path),
-  office: (data, path) => getOfficesData(data, path)
+  office: (data, path) => getResourcesData(data, 'office', path)
 };
 
 const nestResourcesInfo = async (originalPath, resourcesLeft, rawData) => {
