@@ -12,7 +12,7 @@ class DepartmentsSingleton {
   }
 
   saveDepartments(key) {
-    return Object.assign({}, ...departmentsJson.map(item => ({ [item[key]]: item })))
+    return Object.assign({}, ...departmentsJson.map(item => ({ [item[key]]: item })));
   }
 
   fetchOne(id) {

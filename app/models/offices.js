@@ -12,7 +12,7 @@ class OfficesSingleton {
   }
 
   saveOffices(key) {
-    return Object.assign({}, ...officesJson.map(item => ({ [item[key]]: item })))
+    return Object.assign({}, ...officesJson.map(item => ({ [item[key]]: item })));
   }
 
   fetchOne(id) {

@@ -11,7 +11,7 @@ const init = () => {
   const app = express();
   const port = config.PORT || 8080;
 
-  //loaders
+  // loaders
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 

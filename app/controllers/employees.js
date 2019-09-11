@@ -16,8 +16,7 @@ exports.getList = (req, res) => {
 exports.getDetail = (req, res) => {
   logger.info(`Employee detail request with params
     ${Util.inspect({ params: req.params, query: req.query }, { depth: null })}`);
-  //TODO: api/{resource}/:id is broken, {missing auth token}
-  const id = `id=${req.params.id}`; //temporary fix:
+  const id = `id=${req.params.id}`; // temporary fix:
   return employeesService
     .getDetail(id)
     .then(response => res.json(response.data))
