@@ -6,10 +6,11 @@ exports.getList = (req, res) => {
   logger.info(`Employees list request with query params ${Util.inspect(req.query, { depth: null })}`);
   return employeesService
     .getList(req.query)
-    .then(response => res.json({response}))
-    .catch(err => {
-      logger.error(err);
-      return res.status(400).send(err);
+    .then(response => res.json({ response: response.data} ))
+    .catch(errResponse => {
+      console.log('ERR: ', errResponse);
+      // logger.error(errResponse.erorr);
+      return res.status(400).send(errResponse.error);
     });
 };
 
@@ -20,8 +21,8 @@ exports.getDetail = (req, res) => {
   return employeesService
     .getDetail(id)
     .then(response => res.json(response.data))
-    .catch(err => {
-      logger.error(err);
-      return res.status(400).send(err);
+    .catch(errResponse => {
+      logger.error(errResponse.error);
+      return res.status(400).send(errResponse.error);
     });
 };

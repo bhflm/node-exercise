@@ -44,7 +44,7 @@ describe('Employees tests', () => {
         done();
       });
   });
-  test.only('Get employees with double nested managers', done => {
+  test('Get employees with double nested managers', done => {
     return request(server)
       .get('/employees?expand=manager.manager')
       .end((err, res) => {
@@ -71,8 +71,8 @@ describe('Employees tests', () => {
     return request(server)
       .get('/employees/4')
       .end((err, res) => {
-        expect(res.body.response[0]).toHaveProperty('id');
-        expect(res.body.response[0].id).toBe(4);
+        expect(res.body[0]).toHaveProperty('id');
+        expect(res.body[0].id).toBe(4);
         expect(res.status).toBe(200);
         done();
       });

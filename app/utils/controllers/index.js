@@ -8,18 +8,22 @@ const arrayAsObj = (target, key) => Object.assign({}, ...target.map(item => ({ [
 
 const getNestedPath = (nestedPath, levelsDeep) => nestedPath.slice(0, levelsDeep);
 
-const getManagersData = (data, {nestedPath, levelsDeep}) => {
+const getManagersData = (data, { nestedPath, levelsDeep }) => {
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
-  const managersIds = compact(uniq(data.map(each => {
-    const foo = get(each,nestedRelation);
-    return foo;
-  })));
+  const managersIds = compact(
+    uniq(
+      data.map(each => {
+        const foo = get(each, nestedRelation);
+        return foo;
+      })
+    )
+  );
   return getResourceData
     .manager({ id: managersIds })
     .then(managersDataResponse => {
       const managersHash = arrayAsObj(managersDataResponse.data, 'id');
       const expandedData = data.map(each => {
-        const nestedData =  each[nestedRelation] ? managersHash[each[nestedRelation]] : null;
+        const nestedData = each[nestedRelation] ? managersHash[each[nestedRelation]] : null;
         if (each[nestedRelation]) each[nestedRelation] = nestedData;
         return each;
       });
@@ -28,18 +32,18 @@ const getManagersData = (data, {nestedPath, levelsDeep}) => {
     .catch(err => Promise.reject(err));
 };
 
-const getDepartmentsData = (data, {nestedPath, levelsDeep}) => {
+const getDepartmentsData = (data, { nestedPath, levelsDeep }) => {
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
-  const departmentsIds = compact(uniq(data.map(each => get(each,nestedPath))));
+  const departmentsIds = compact(uniq(data.map(each => get(each, nestedPath))));
   console.log('DEPARTMENTS IDS: ', departmentsIds);
   return getResourceData.department({ id: departmentsIds }).then(departmentsResponse => {
     console.log('DEPARTMENTS RESPONSE: ', departmentsResponse);
     const departmentsHash = arrayAsObj(departmentsResponse, 'id');
     return data;
-  })
+  });
 };
 
-const getOfficesData = (data, {nestedPath, levelsDeep}) => {
+const getOfficesData = (data, { nestedPath, levelsDeep }) => {
   const officesIds = data.map(each => {
     each.office;
   });
@@ -57,20 +61,18 @@ const getResourceData = {
 const expandResource = {
   department: (data, path) => getDepartmentsData(data, path),
   superdepartment: (data, path) => getDepartmentsData(data, path),
-  manager: (data, path) => getManagersData(data,path),
+  manager: (data, path) => getManagersData(data, path),
   office: (data, path) => getOfficesData(data, path)
 };
 
 const nestResourcesInfo = async (originalPath, resourcesLeft, rawData) => {
   let resource = resourcesLeft.length ? resourcesLeft.shift() : null;
   try {
-    const resourceData = await expandResource[resource](rawData,originalPath);
+    const resourceData = await expandResource[resource](rawData, originalPath);
     originalPath.levelsDeep += 1;
-    return resourcesLeft.length
-      ? nestResourcesInfo(originalPath, resourcesLeft, resourceData)
-      : resourceData;
+    return resourcesLeft.length ? nestResourcesInfo(originalPath, resourcesLeft, resourceData) : resourceData;
   } catch (err) {
-    return {err};
+    return { err };
   }
 };
 
@@ -82,7 +84,7 @@ const assignNested = (each, resourceKey, nestedResources) => {
 
 exports.expandRelation = async (data, expands) => {
   const resourcesToExpand = expands.split('.');
-  const originalPath = Object.assign({},{ nestedPath: expands.split('.'), levelsDeep: 1});
+  const originalPath = Object.assign({}, { nestedPath: expands.split('.'), levelsDeep: 1 });
   const expandedData = await nestResourcesInfo(originalPath, resourcesToExpand, data);
   return expandedData;
 };
