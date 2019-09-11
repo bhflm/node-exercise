@@ -71,10 +71,9 @@ const nestResourcesInfo = async (originalPath, resourcesLeft, rawData) => {
     originalPath.levelsDeep += 1;
     return resourcesLeft.length
       ? nestResourcesInfo(originalPath, resourcesLeft, resourceData)
-      : arrayAsObj(resourceData, 'id');
+      : resourceData;
   } catch (err) {
-    console.log('err: ', err);
-    return {};
+    return {err};
   }
 };
 
@@ -87,8 +86,6 @@ const assignNested = (each, resourceKey, nestedResources) => {
 exports.expandRelation = async (data, expands) => {
   const resourcesToExpand = expands.split('.');
   const originalPath = Object.assign({},{ nestedPath: expands.split('.'), levelsDeep: 1});
-  const nestedResources = await nestResourcesInfo(originalPath, resourcesToExpand, data);
-  const resourceKey = resourcesToExpand[0];
-  const expandedData = data.map(each => assignNested(each, resourceKey, nestedResources));
+  const expandedData = await nestResourcesInfo(originalPath, resourcesToExpand, data);
   return expandedData;
 };
