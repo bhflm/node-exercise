@@ -104,6 +104,20 @@ describe('Employees tests', () => {
         done();
       });
   });
+  test('Get employees with expand=department.superdepartment', done => {
+    return request(server)
+      .get('/employees?expand=department.superdepartment')
+      .end((err, res) => {
+        expect(res.body.response[67].department.id).toBe(9);
+        expect(res.body.response[67].department.name).toBe('Sales Development');
+        expect(res.body.response[67].department.superdepartment.id).toBe(6);
+        expect(res.body.response[99].department.id).toBe(5);
+        expect(res.body.response[99].department.name).toBe('Inbound Sales');
+        expect(res.body.response[99].department.superdepartment.id).toBe(1);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
   test('Get two employees from list with id 4 & 6', done => {
     return request(server)
       .get('/employees?id=4&id=6')

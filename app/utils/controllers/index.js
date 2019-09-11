@@ -80,6 +80,5 @@ exports.expandRelation = async (data, expands) => {
   const resourcesToExpand = expands.split('.');
   const originalPath = Object.assign({}, { nestedPath: expands.split('.'), levelsDeep: 1 });
   const expandedData = await nestResourcesInfo(originalPath, resourcesToExpand, data);
-  console.log(Util.inspect(expandedData, {depth: null}));
   return expandedData;
 };
