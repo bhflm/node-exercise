@@ -10,7 +10,10 @@ const getNestedPath = (nestedPath, levelsDeep) => nestedPath.slice(0, levelsDeep
 
 const getManagersData = (data, {nestedPath, levelsDeep}) => {
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
-  const managersIds = compact(uniq(data.map(each => each[nestedRelation] || null)));
+  const managersIds = compact(uniq(data.map(each => {
+    const foo = get(each,nestedRelation);
+    return foo;
+  })));
   return getResourceData
     .manager({ id: managersIds })
     .then(managersDataResponse => {
@@ -29,11 +32,11 @@ const getDepartmentsData = (data, {nestedPath, levelsDeep}) => {
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
   const departmentsIds = compact(uniq(data.map(each => get(each,nestedPath))));
   console.log('DEPARTMENTS IDS: ', departmentsIds);
-  const departmentsData = departmentsIds.map(
-    id => departmentsService.getDepartment(id) || null
-  );
-  console.log('departmentsData: ', departmentsData);
-  return departmentsData;
+  return getResourceData.department({ id: departmentsIds }).then(departmentsResponse => {
+    console.log('DEPARTMENTS RESPONSE: ', departmentsResponse);
+    const departmentsHash = arrayAsObj(departmentsResponse, 'id');
+    return data;
+  })
 };
 
 const getOfficesData = (data, {nestedPath, levelsDeep}) => {
@@ -45,7 +48,7 @@ const getOfficesData = (data, {nestedPath, levelsDeep}) => {
 };
 
 const getResourceData = {
-  department: id => departmentsService.getDepartment(id),
+  department: id => departmentsService.getMultipleDepartments(id),
   office: id => officesService.getOffice(id),
   superdepartment: id => departmentsService.getDepartment(id),
   manager: ids => employeesService.getList(ids)
