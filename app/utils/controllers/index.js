@@ -33,6 +33,7 @@ const getManagersData = (data, { nestedPath, levelsDeep }) => {
 };
 
 const getResourcesData = (data, resource, { nestedPath, levelsDeep }) => {
+  console.log('get rsc data');
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
   const resourcesIds = compact(uniq(data.map(each => get(each, nestedPath))));
   return getResourceData[resource]({ id: resourcesIds }).then(response => {
@@ -42,7 +43,7 @@ const getResourcesData = (data, resource, { nestedPath, levelsDeep }) => {
       return each;
     })
     return expandedData;
-  });
+  }).catch(err => Promise.reject(err));
 };
 
 const getResourceData = {
@@ -54,7 +55,7 @@ const getResourceData = {
 
 const expandResource = {
   department: (data, path) => getResourcesData(data, 'department', path),
-  superdepartment: (data, path) => getResourcesData(data, 'department', path),
+  superdepartment: (data, path) => getResourcesData(data, 'superdepartment', path),
   manager: (data, path) => getManagersData(data, path),
   office: (data, path) => getResourcesData(data, 'office', path)
 };
@@ -80,5 +81,6 @@ exports.expandRelation = async (data, expands) => {
   const resourcesToExpand = expands.split('.');
   const originalPath = Object.assign({}, { nestedPath: expands.split('.'), levelsDeep: 1 });
   const expandedData = await nestResourcesInfo(originalPath, resourcesToExpand, data);
+  console.log('expanded data: ', expandedData);
   return expandedData;
 };

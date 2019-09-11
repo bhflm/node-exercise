@@ -45,7 +45,7 @@ describe('Employees tests', () => {
         done();
       });
   });
-  test('Get employees with double nested managers', done => {
+  test('Get employees with expand=manager.manager', done => {
     return request(server)
       .get('/employees?expand=manager.manager')
       .end((err, res) => {
@@ -56,7 +56,7 @@ describe('Employees tests', () => {
         done();
       });
   });
-  test('Get employees with expand=managers.department', done => {
+  test('Get employees with expand=manager.department', done => {
     return request(server)
       .get('/employees?expand=manager.department')
       .end((err, res) => {
@@ -65,6 +65,19 @@ describe('Employees tests', () => {
         expect(res.body.response[4].manager.department.id).toBe(4);
         expect(res.body.response[4].manager.department.name).toBe('Design');
         expect(res.body.response[4].manager.department.superdepartment).toBe(3);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
+  test('Get employees with expand=managers.office', done => {
+    return request(server)
+      .get('/employees?expand=manager.office')
+      .end((err, res) => {
+        expect(res.body.response[1].manager.office.id).toBe(2);
+        expect(res.body.response[1].manager.office.city).toBe('New York');
+        expect(res.body.response[1].manager.office.address).toBe('20 W 34th St');
+        expect(res.body.response[2].manager).toBe(null);
+        expect(res.body.response[3].manager).toBe(null);
         expect(res.status).toBe(200);
         done();
       });
