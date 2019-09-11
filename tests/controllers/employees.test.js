@@ -1,5 +1,6 @@
 const request = require('supertest'),
   nock = require('nock'),
+  Util = require('util'),
   server = require('../../app'),
   { API } = require('../../app/config');
 
@@ -55,10 +56,15 @@ describe('Employees tests', () => {
         done();
       });
   });
-  test.only('Get employees with expand=managers.departments', done => {
+  test('Get employees with expand=managers.department', done => {
     return request(server)
-      .get('/employees?expand=manager.manager')
+      .get('/employees?expand=manager.department')
       .end((err, res) => {
+        expect(res.body.response[2].manager).toBe(null);
+        expect(res.body.response[3].manager).toBe(null);
+        expect(res.body.response[4].manager.department.id).toBe(4);
+        expect(res.body.response[4].manager.department.name).toBe('Design');
+        expect(res.body.response[4].manager.department.superdepartment).toBe(3);
         expect(res.status).toBe(200);
         done();
       });
