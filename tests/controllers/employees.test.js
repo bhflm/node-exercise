@@ -30,7 +30,7 @@ describe('Employees tests', () => {
         done();
       });
   });
-  test('Get employees with nested managers', done => {
+  test('Get employees with expand=manager', done => {
     return request(server)
       .get('/employees?expand=manager')
       .end((err, res) => {
@@ -41,6 +41,28 @@ describe('Employees tests', () => {
         expect(res.body.response[1].manager).toHaveProperty('manager');
         expect(res.body.response[1].manager).toHaveProperty('department');
         expect(res.body.response[1].manager).toHaveProperty('office');
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
+  test('Get employees with expand=office', done => {
+    return request(server)
+      .get('/employees?expand=office')
+      .end((err, res) => {
+        expect(res.body.response[0].office.address).toBe('20 W 34th St');
+        expect(res.body.response[1].office.address).toBe('20 W 34th St');
+        expect(res.body.response[2].office).toBe(null);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
+  test('Get employees with expand=department', done => {
+    return request(server)
+      .get('/employees?expand=department')
+      .end((err, res) => {
+        expect(res.body.response[0].department.name).toBe('Inbound Sales');
+        expect(res.body.response[1].department.name).toBe('Inbound Sales');
+        expect(res.body.response[2].department.name).toBe('Design');
         expect(res.status).toBe(200);
         done();
       });
