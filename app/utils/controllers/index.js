@@ -6,6 +6,11 @@ const departmentsService = require('../../services/departments');
 const officesService = require('../../services/offices');
 const { DEFAULT_QUERY_PARAMS } = require('../../constants');
 
+const filterResourceByIds = (resources, ids) =>
+  resources.filter(each => {
+    const resource = ids.indexOf(each.id);
+    if (resource != -1) return each;
+  });
 
 const arrayAsObj = (target, key) => Object.assign({}, ...target.map(item => ({ [item[key]]: item })));
 
@@ -38,9 +43,9 @@ const getManagersData = (data, { nestedPath, levelsDeep }) => {
 };
 
 const getResourceData = {
-  department: id => departmentsService.getMultipleDepartments({ id, params: {}}, DEFAULT_QUERY_PARAMS),
+  department: id => departmentsService.getMultipleDepartments({ id, params: {} }, DEFAULT_QUERY_PARAMS),
   office: id => officesService.getMultipleOffices(id),
-  superdepartment: id => departmentsService.getMultipleDepartments({ id, params: {}}, DEFAULT_QUERY_PARAMS),
+  superdepartment: id => departmentsService.getMultipleDepartments({ id, params: {} }, DEFAULT_QUERY_PARAMS),
   manager: ids => employeesService.getList(ids)
 };
 

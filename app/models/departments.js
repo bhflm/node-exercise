@@ -22,8 +22,8 @@ class DepartmentsSingleton {
 
   fetchAll({ limit, offset }) {
     let departments = Object.values(this.departments);
-    if (offset != DEFAULT_OFFSET) departments = departments.slice(offset,departments.length);
-    if (offset != DEFAULT_LIMIT) departments = departments.slice(0,limit);
+    if (offset != DEFAULT_OFFSET) departments = departments.slice(offset, departments.length);
+    if (offset != DEFAULT_LIMIT) departments = departments.slice(0, limit);
     return departments;
   }
 }

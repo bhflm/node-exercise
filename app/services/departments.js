@@ -3,20 +3,16 @@ const Util = require('util'),
   DepartmentsSingleton = require('../models/departments'),
   logger = require('../logger'),
   departments = new DepartmentsSingleton(),
+  { filterResourceByIds } = require('../utils/controllers'),
   { DEFAULT_LIMIT, DEFAULT_OFFSET } = require('../constants');
 
 exports.getDepartment = id => departments.fetchOne(id);
 
-exports.getMultipleDepartments = ({ ids, params }, { limit , offset }) =>
+exports.getMultipleDepartments = ({ ids, params }, { limit, offset }) =>
   new Promise((resolve, reject) => {
-    logger.info(`Querying departments service with ${Util.inspect({ ids, params }, {depth: null})}`);
+    logger.info(`Querying departments service with ${Util.inspect({ ids, params }, { depth: null })}`);
     const allDepartments = departments.fetchAll({ limit, offset });
     let responseDepartments = [...allDepartments];
-    if (ids) {
-      responseDepartments = responseDepartments.filter(each => {
-        const department = ids.indexOf(each.id)
-        if (department != -1) return each;
-      });
-    }
+    if (ids) responseDepartments = filterResourceByIds(responseDepartments, ids);
     return resolve(responseDepartments);
   });
