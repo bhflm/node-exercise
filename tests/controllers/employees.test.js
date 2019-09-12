@@ -4,7 +4,7 @@ const request = require('supertest'),
   server = require('../../app'),
   { API } = require('../../app/config');
 
-describe('Employees tests', () => {
+describe.only('Employees tests', () => {
   test('Dont get employees but receive error', done => {
     return request(server)
       .get('/employees?id=a')

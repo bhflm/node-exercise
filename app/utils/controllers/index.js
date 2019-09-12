@@ -1,5 +1,6 @@
 const Util = require('util');
-const { set, get, compact, uniq } = require('lodash');
+const { set, get, compact, uniq, flatten } = require('lodash');
+const logger = require('../../logger');
 const employeesService = require('../../services/employees');
 const departmentsService = require('../../services/departments');
 const officesService = require('../../services/offices');
@@ -7,6 +8,8 @@ const officesService = require('../../services/offices');
 const arrayAsObj = (target, key) => Object.assign({}, ...target.map(item => ({ [item[key]]: item })));
 
 const getNestedPath = (nestedPath, levelsDeep) => nestedPath.slice(0, levelsDeep);
+
+const hasOneExpand = obj => typeof obj === 'string';
 
 const getManagersData = (data, { nestedPath, levelsDeep }) => {
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
@@ -79,9 +82,25 @@ const assignNested = (each, resourceKey, nestedResources) => {
   return { ...each, [resourceKey]: nestedResources[resourceId] };
 };
 
+const setNestedPaths = expands => {
+  const resources = hasOneExpand(expands) ? expands.split('.') : expands.map(each => each.split('.'));
+  return typeof resources[0] === 'string' ? [resources] : resources;
+};
+
 exports.expandRelation = async (data, expands, pagination) => {
-  const resourcesToExpand = expands.split('.');
-  const originalPath = Object.assign({}, { nestedPath: expands.split('.'), levelsDeep: 1 });
-  let expandedData = await nestResourcesInfo(originalPath, resourcesToExpand, data);
-  return expandedData;
+  try {
+    const resourcesToExpand = setNestedPaths(expands);
+    const expandedResources = resourcesToExpand.map(async resources => {
+      const originalPath = Object.assign({}, { nestedPath: resources, levelsDeep: 1 });
+      const toExpand = [...resources];
+      const nested = await nestResourcesInfo(originalPath, toExpand, data);
+      return nested;
+    });
+    const rawResponse = await Promise.all(expandedResources);
+    const response = uniq(flatten(rawResponse));
+    return response;
+  } catch (error) {
+    logger.error(`Service error: ${error}`);
+    return error;
+  }
 };
