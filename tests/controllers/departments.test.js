@@ -4,7 +4,7 @@ const request = require('supertest'),
   server = require('../../app'),
   { API } = require('../../app/config');
 
-describe.only('Departments tests', () => {
+describe('Departments tests', () => {
   test('Get all departments', done => {
     return request(server)
       .get('/departments')

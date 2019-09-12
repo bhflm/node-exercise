@@ -2,11 +2,12 @@ const Util = require('util'),
   { compact } = require('lodash'),
   DepartmentsSingleton = require('../models/departments'),
   logger = require('../logger'),
-  departments = new DepartmentsSingleton();
+  departments = new DepartmentsSingleton(),
+  { DEFAULT_LIMIT, DEFAULT_OFFSET } = require('../constants');
 
 exports.getDepartment = id => departments.fetchOne(id);
 
-exports.getMultipleDepartments = ({ ids, params }, { limit, offset }) =>
+exports.getMultipleDepartments = ({ ids, params }, { limit , offset }) =>
   new Promise((resolve, reject) => {
     logger.info(`Querying departments service with ${Util.inspect({ ids, params }, {depth: null})}`);
     const allDepartments = departments.fetchAll({ limit, offset });
