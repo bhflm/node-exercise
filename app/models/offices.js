@@ -1,4 +1,5 @@
 const officesJson = require('./seeds/offices');
+const { DEFAULT_LIMIT, DEFAULT_OFFSET } = require('../constants');
 
 class OfficesSingleton {
   constructor(deparments = {}) {
@@ -17,6 +18,13 @@ class OfficesSingleton {
 
   fetchOne(id) {
     return this.offices[id];
+  }
+
+  fetchAll({ limit, offset }) {
+    let offices = Object.values(this.offices);
+    if (offset != DEFAULT_OFFSET) offices = offices.slice(offset, departments.length);
+    if (offset != DEFAULT_LIMIT) offices = offices.slice(0, limit);
+    return offices;
   }
 }
 
