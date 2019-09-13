@@ -51,4 +51,23 @@ describe('Departments tests', () => {
         done();
       });
   });
+  test('Departments should get valid expanded superdepartment', done => {
+    return request(server)
+      .get('/departments?expand=superdepartment')
+      .end((err, res) => {
+        expect(res.body.data[5].superdepartment.id).toBe(1);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
+  test('Single department should get valid expanded superdepartment', done => {
+    return request(server)
+      .get('/departments/6?expand=superdepartment')
+      .end((err, res) => {
+        console.log('res: ', res.body);
+        expect(res.body.data[0].superdepartment.id).toBe(1);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
 });

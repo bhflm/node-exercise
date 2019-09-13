@@ -152,4 +152,15 @@ describe('Employees tests', () => {
         done();
       });
   });
+  test('Should NOT Get expanded relation with invalid expand', done => {
+    return request(server)
+      .get('/employees/2?expand=superdepartment.department.office.superdepartment')
+      .end((err, res) => {
+        expect(res.body[0].department).toBe(5);
+        expect(res.body[0].office).toBe(2);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
+
 });
