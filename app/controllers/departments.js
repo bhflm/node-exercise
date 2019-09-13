@@ -17,4 +17,13 @@ exports.getList = (req, res) => {
     });
 };
 
-exports.getDetail = (req, res) => res.json({});
+exports.getDetail = (req, res) => {
+  logger.info(`Single department request with param: ${Util.inspect(req.params, { depth:null })}`);
+  const departmentId = req.params.id;
+  return departmentsService.getDepartment(departmentId)
+  .then(response => res.json({ data: response }))
+  .catch(err => {
+    logger.error(`Error getting single department ${err}`);
+    return Promise.reject(err);
+  })
+};

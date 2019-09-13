@@ -42,5 +42,15 @@ describe('Departments tests', () => {
         done();
       });
   });
+  test.only('Get single department with id 3', done => {
+    return request(server)
+      .get('/departments/3')
+      .end((err, res) => {
+        console.log('res: ', res.body.data);
+        // expect(res.body.data[0].id).toBe(3);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
 
 });

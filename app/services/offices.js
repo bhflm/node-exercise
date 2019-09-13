@@ -6,7 +6,11 @@ const Util = require('util'),
   { filterResourceByIds } = require('../utils/controllers'),
   { DEFAULT_LIMIT, DEFAULT_OFFSET } = require('../constants');
 
-exports.getOffice = id => offices.fetchOne(id);
+exports.getOffice = id => new Promise((resolve, reject) => {
+  const office = offices.fetchOne(id);
+  if (!office) return reject(null);
+  return resolve(office);
+});
 
 exports.getMultipleOffices = ({ ids, params }, { limit, offset }) =>
   new Promise((resolve, reject) => {
