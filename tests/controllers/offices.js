@@ -9,16 +9,16 @@ describe('Offices tests', () => {
     return request(server)
       .get('/offices')
       .end((err, res) => {
-        expect(res.body.data.length).toBe(10);
+        expect(res.body.data.length).toBe(5);
         expect(res.status).toBe(200);
         done();
       });
   });
-  test('Get all offices with limit 3', done => {
+  test('Get all offices with limit 2', done => {
     return request(server)
-      .get('/offices?limit=3')
+      .get('/offices?limit=2')
       .end((err, res) => {
-        expect(res.body.data.length).toBe(3);
+        expect(res.body.data.length).toBe(2);
         expect(res.status).toBe(200);
         done();
       });
@@ -32,12 +32,12 @@ describe('Offices tests', () => {
         done();
       });
   });
-  test('Get all offices with offset 3 and limit 3', done => {
+  test('Get all offices with offset 2 and limit 2', done => {
     return request(server)
-      .get('/offices?limit=3&offset=3')
+      .get('/offices?limit=2&offset=2')
       .end((err, res) => {
-        expect(res.body.data[0].id).toBe(4);
-        expect(res.body.data.length).toBe(3);
+        expect(res.body.data[0].id).toBe(3);
+        expect(res.body.data.length).toBe(2);
         expect(res.status).toBe(200);
         done();
       });

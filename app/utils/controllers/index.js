@@ -44,7 +44,7 @@ const getManagersData = (data, { nestedPath, levelsDeep }) => {
 
 const getResourceData = {
   department: id => departmentsService.getMultipleDepartments({ id, params: {} }, DEFAULT_QUERY_PARAMS),
-  office: id => officesService.getMultipleOffices(id),
+  office: id => officesService.getMultipleOffices({ id, params: {} }, DEFAULT_QUERY_PARAMS),
   superdepartment: id => departmentsService.getMultipleDepartments({ id, params: {} }, DEFAULT_QUERY_PARAMS),
   manager: ids => employeesService.getList(ids)
 };

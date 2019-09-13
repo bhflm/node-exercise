@@ -22,7 +22,7 @@ class OfficesSingleton {
 
   fetchAll({ limit, offset }) {
     let offices = Object.values(this.offices);
-    if (offset != DEFAULT_OFFSET) offices = offices.slice(offset, departments.length);
+    if (offset != DEFAULT_OFFSET) offices = offices.slice(offset, offices.length);
     if (offset != DEFAULT_LIMIT) offices = offices.slice(0, limit);
     return offices;
   }

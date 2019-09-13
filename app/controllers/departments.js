@@ -10,11 +10,11 @@ exports.getList = (req, res) => {
   const offset = req.query.offset ? parseInt(req.query.offset) : DEFAULT_OFFSET;
   return departmentsService
     .getMultipleDepartments({ id: req.query.id, params: req.query.params }, { limit, offset })
-    .then(response => {
-      return res.json({ data: response });
-    })
+    .then(response => res.json({ data: response }))
     .catch(err => {
       logger.error(`Error getting departments list:${err}`);
       return Promise.reject(err);
     });
 };
+
+exports.getDetail = (req, res) => res.json({});
