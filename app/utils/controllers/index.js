@@ -4,7 +4,7 @@ const logger = require('../../logger');
 const employeesService = require('../../services/employees');
 const departmentsService = require('../../services/departments');
 const officesService = require('../../services/offices');
-const { DEFAULT_QUERY_PARAMS } = require('../../constants');
+const { DEFAULT_QUERY_PARAMS, DEPARTMENT, SUPERDEPARTMENT, OFFICE } = require('../../constants');
 
 const arrayAsObj = (target, key) => Object.assign({}, ...target.map(item => ({ [item[key]]: item })));
 
@@ -37,10 +37,10 @@ const getResourceData = {
 };
 
 const expandResource = {
-  department: (data, path) => getResourcesData(data, 'department', path),
-  superdepartment: (data, path) => getResourcesData(data, 'superdepartment', path),
+  department: (data, path) => getResourcesData(data, DEPARTMENT, path),
+  superdepartment: (data, path) => getResourcesData(data, SUPERDEPARTMENT, path),
   manager: (data, path) => getManagersData(data, path),
-  office: (data, path) => getResourcesData(data, 'office', path)
+  office: (data, path) => getResourcesData(data, OFFICE, path)
 };
 
 

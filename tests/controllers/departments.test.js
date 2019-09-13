@@ -64,7 +64,6 @@ describe('Departments tests', () => {
     return request(server)
       .get('/departments/6?expand=superdepartment')
       .end((err, res) => {
-        console.log('res: ', res.body);
         expect(res.body.data[0].superdepartment.id).toBe(1);
         expect(res.status).toBe(200);
         done();

@@ -4,7 +4,7 @@ const Util = require('util'),
   DepartmentsSingleton = require('../models/departments'),
   departments = new DepartmentsSingleton(),
   { filterResourceByIds } = require('../utils/controllers'),
-  { DEFAULT_LIMIT, DEFAULT_OFFSET } = require('../constants');
+  { DEFAULT_LIMIT, DEFAULT_OFFSET, SUPERDEPARTMENT } = require('../constants');
 
 const expandSuperDepartment = responseDepartments => responseDepartments.map(each => {
   const department = departments.fetchOne(each.superdepartment);
@@ -15,7 +15,7 @@ const expandSuperDepartment = responseDepartments => responseDepartments.map(eac
 const filterAndReturnExpanded = (data, ids, expand) => {
   let responseDepartments = [...data];
   if (ids) responseDepartments = [...filterResourceByIds(responseDepartments, ids)];
-  return expand === 'superdepartment' ? expandSuperDepartment(responseDepartments) : responseDepartments;
+  return expand === SUPERDEPARTMENT ? expandSuperDepartment(responseDepartments) : responseDepartments;
 };
 
 exports.getDepartment = (id, params) => new Promise((resolve, reject) => {
