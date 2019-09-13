@@ -43,7 +43,6 @@ const expandResource = {
   office: (data, path) => getResourcesData(data, OFFICE, path)
 };
 
-
 const getManagersData = (data, { nestedPath, levelsDeep }) => {
   const nestedRelation = getNestedPath(nestedPath, levelsDeep);
   const managersIds = compact(

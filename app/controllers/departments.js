@@ -21,10 +21,11 @@ exports.getDetail = (req, res) => {
   logger.info(`Single department request ${Util.inspect(req.params, req.query, { depth: null })}`);
   const departmentId = req.params.id;
   const params = req.query.expand ? req.query.expand : {};
-  return departmentsService.getDepartment(departmentId, params)
-  .then(response => res.json({ data: response }))
-  .catch(err => {
-    logger.error(`Error getting single department ${err}`);
-    return Promise.reject(err);
-  })
+  return departmentsService
+    .getDepartment(departmentId, params)
+    .then(response => res.json({ data: response }))
+    .catch(err => {
+      logger.error(`Error getting single department ${err}`);
+      return Promise.reject(err);
+    });
 };

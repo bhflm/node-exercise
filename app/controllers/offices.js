@@ -17,12 +17,13 @@ exports.getList = (req, res) => {
 };
 
 exports.getDetail = (req, res) => {
-  logger.info(`Single office request with param: ${Util.inspect(req.params, { depth:null })}`);
+  logger.info(`Single office request with param: ${Util.inspect(req.params, { depth: null })}`);
   const officeId = req.params.id;
-  return officesService.getOffice(officeId)
-  .then(response => res.json({ data: response }))
-  .catch(err => {
-    logger.error(`Error getting single office ${err}`);
-    return Promise.reject(err);
-  })
+  return officesService
+    .getOffice(officeId)
+    .then(response => res.json({ data: response }))
+    .catch(err => {
+      logger.error(`Error getting single office ${err}`);
+      return Promise.reject(err);
+    });
 };

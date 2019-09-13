@@ -6,11 +6,12 @@ const Util = require('util'),
   { filterResourceByIds } = require('../utils/controllers'),
   { DEFAULT_LIMIT, DEFAULT_OFFSET, SUPERDEPARTMENT } = require('../constants');
 
-const expandSuperDepartment = responseDepartments => responseDepartments.map(each => {
-  const department = departments.fetchOne(each.superdepartment);
-    if (each.superdepartment) return {...each, superdepartment: department};
+const expandSuperDepartment = responseDepartments =>
+  responseDepartments.map(each => {
+    const department = departments.fetchOne(each.superdepartment);
+    if (each.superdepartment) return { ...each, superdepartment: department };
     return each;
-});
+  });
 
 const filterAndReturnExpanded = (data, ids, expand) => {
   let responseDepartments = [...data];
@@ -18,12 +19,13 @@ const filterAndReturnExpanded = (data, ids, expand) => {
   return expand === SUPERDEPARTMENT ? expandSuperDepartment(responseDepartments) : responseDepartments;
 };
 
-exports.getDepartment = (id, params) => new Promise((resolve, reject) => {
-  const department = departments.fetchOne(id);
-  if (!department) return reject(null);
-  const responseDepartment = filterAndReturnExpanded([department], null, params);
-  return resolve(responseDepartment);
-});
+exports.getDepartment = (id, params) =>
+  new Promise((resolve, reject) => {
+    const department = departments.fetchOne(id);
+    if (!department) return reject(null);
+    const responseDepartment = filterAndReturnExpanded([department], null, params);
+    return resolve(responseDepartment);
+  });
 
 exports.getMultipleDepartments = ({ ids, params }, { limit, offset }) =>
   new Promise((resolve, reject) => {
@@ -32,4 +34,4 @@ exports.getMultipleDepartments = ({ ids, params }, { limit, offset }) =>
     if (!allDepartments) return reject(null);
     const responseDepartments = filterAndReturnExpanded(allDepartments, ids, params);
     return resolve(responseDepartments);
-});
+  });
