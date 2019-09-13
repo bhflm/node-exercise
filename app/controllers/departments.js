@@ -2,7 +2,6 @@ const Util = require('util');
 const departmentsService = require('../services/departments');
 const logger = require('../logger');
 const { DEFAULT_LIMIT, DEFAULT_OFFSET } = require('../constants');
-const { expandRelation } = require('../utils/controllers');
 
 exports.getList = (req, res) => {
   logger.info(`Departments list request with query params ${Util.inspect(req.query, { depth: null })}`);

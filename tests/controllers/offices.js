@@ -42,5 +42,13 @@ describe('Offices tests', () => {
         done();
       });
   });
-
+  test('Get single office with id 3', done => {
+    return request(server)
+      .get('/offices/3')
+      .end((err, res) => {
+        expect(res.body.data.id).toBe(3);
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
 });
