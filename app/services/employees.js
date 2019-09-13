@@ -23,10 +23,15 @@ exports.getList = async params => {
   }
 };
 
-exports.getDetail = async params => {
+exports.getDetail = async (params, query) => {
   try {
-    logger.info(`Querying service /employee/${params}`);
+    const queryParams = `?${queryString.stringify(query)}`;
+    logger.info(`Querying service /employee/${params}${queryParams}`);
     const response = await axios.get(`${API.BigCorp}/employees/?${params}`);
+    if (query.expand) {
+      const responseWithExpand = await expandRelation(response.data, query.expand);
+      return { data: responseWithExpand };
+    }
     return { data: response.data };
   } catch (err) {
     return Promise.reject(err);

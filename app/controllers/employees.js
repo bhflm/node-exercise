@@ -15,9 +15,9 @@ exports.getList = (req, res) => {
 exports.getDetail = (req, res) => {
   logger.info(`Employee detail request with params
     ${Util.inspect({ params: req.params, query: req.query }, { depth: null })}`);
-  const id = `id=${req.params.id}`; // temporary fix:
+  const id = `id=${req.params.id}`;
   return employeesService
-    .getDetail(id)
+    .getDetail(id, req.query)
     .then(response => res.json(response.data))
     .catch(errResponse => {
       logger.error(errResponse);

@@ -140,4 +140,16 @@ describe('Employees tests', () => {
         done();
       });
   });
+  test('Get one employee with id 2 and expand manager', done => {
+    return request(server)
+      .get('/employees/2?expand=manager')
+      .end((err, res) => {
+        expect(res.body[0]).toHaveProperty('id');
+        expect(res.body[0].id).toBe(2);
+        expect(res.body[0].manager.id).toBe(1);
+        expect(res.body[0].manager.first).toBe('Patricia');
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
 });
