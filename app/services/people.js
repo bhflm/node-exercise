@@ -2,19 +2,19 @@ const axios = require('axios');
 const { API } = require('../config');
 const logger = require('../logger');
 
-const serviceEndpoint = 'people';
-
 exports.getOne = async params => {
+  const queryParams = params ? `?${params}` : '';
+  const path = `/people${queryParams}`;
   try {
-    const queryParams = '';
-    logger.info(`Querying service /${serviceEndpoint}/${params}`);
-    const response = await axios.get(`${API.SWAPI}/${serviceEndpoint}/?${queryParams}`);
-    if (response) {
-      return response;
+    logger.info(`[PEOPLE] Requesting service ${path}`);
+    const response = await axios.get(`${API.SWAPI}${path}`);
+    if (response.data) {
+      return { data: response.data };
     }
-    logger.info(`[Service: ${serviceEndpoint}]: No data found`);
+    logger.info(`[PEOPLE] ${path}: No data found`);
     return { data: {} };
   } catch (err) {
+    logger.error(`[PEOPLE] Error requesting ${path}: ${err}`);
     return Promise.reject(err);
   }
 };
