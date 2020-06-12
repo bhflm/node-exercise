@@ -1,5 +1,5 @@
-const employees = require('./controllers/employees');
+const people = require('./controllers/people');
 
 exports.init = app => {
-  app.get('/employees', employees.getList);
+  app.get('/people', people.getList);
 };
