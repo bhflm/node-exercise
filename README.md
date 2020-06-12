@@ -9,7 +9,7 @@ Built with Node.js and Express.
 # Commands:
 
 * Running the server:
-`npm start-dev`
+`npm run dev`
 
 * Tests:
 `npm run tests`
