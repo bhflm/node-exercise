@@ -15,6 +15,11 @@ const init = () => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
+  app.get('/', (req, res) => {
+    // homemade healthcheck
+    return res.json({ message: 'ok ' });
+  });
+
   // Require routes into app
   routes.init(app);
   if (ENVIRONMENT !== 'testing') {

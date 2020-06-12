@@ -3,7 +3,6 @@ const queryString = require('querystring');
 const { pickBy } = require('lodash');
 const { API } = require('../config');
 const logger = require('../logger');
-const { expandRelation } = require('../utils/controllers');
 const { DEFAULT_LIMIT, DEFAULT_OFFSET } = require('../constants');
 
 exports.getList = async params => {
@@ -13,8 +12,9 @@ exports.getList = async params => {
     logger.info(`Querying service /employees${query}`);
     const response = await axios.get(`${API.BigCorp}/employees${query}`);
     if (params.expand) {
-      const responseWithExpand = await expandRelation(response.data, params.expand);
-      return { data: responseWithExpand };
+      // const responseWithExpand = await expandRelation(response.data, params.expand);
+      // return { data: responseWithExpand };
+      return {};
     }
     return response;
   } catch (err) {
