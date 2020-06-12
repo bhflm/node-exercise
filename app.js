@@ -22,7 +22,7 @@ const init = () => {
   }
 
   module.exports = app;
-  logger.info(`BIG CORP API - ENV: ${ENVIRONMENT} RUNNING @ PORT:${port}`);
+  logger.info(`[${ENVIRONMENT}]: RUNNING @ PORT:${port}`);
 };
 
 init();
