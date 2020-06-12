@@ -3,7 +3,7 @@ const { API } = require('../config');
 const logger = require('../logger');
 
 exports.getOne = async params => {
-  const queryParams = params ? `?${params}` : '';
+  const queryParams = params ? `${params}` : '';
   const path = `/people${queryParams}`;
   try {
     logger.info(`[PEOPLE] Requesting service ${path}`);
@@ -11,7 +11,7 @@ exports.getOne = async params => {
     if (response.data) {
       return { data: response.data };
     }
-    logger.info(`[PEOPLE] ${path}: No data found`);
+    logger.info(`[PEOPLE] ${path} No data found`);
     return { data: {} };
   } catch (err) {
     logger.error(`[PEOPLE] Error requesting ${path}: ${err}`);

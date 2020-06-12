@@ -2,24 +2,23 @@ const Util = require('util');
 const logger = require('../logger');
 const peopleService = require('../services/people');
 
-const asyncFetchAll = async (peopleList, { currentPage = null, peopleRemaining = null }) => {
+const asyncFetchAll = async (peopleList = [], { currentPage = false, nextPage = false }) => {
+  const page = `?page=${currentPage || 1}`;
   try {
-    // If there are no users left we close the connection and end the function
-    if (!peopleRemaining) {
-      logger.info(`Fetched all users available up to page ${currentPage}`);
+    // If there are no users left and we have already fetched users we end the fetch
+    if (!nextPage && peopleList.length > 0) {
+      logger.info(`Fetched all users available (${peopleList.length}) up to page ${page}`);
       return peopleList;
     }
-    const fetched = [];
-    const query = `?page=${currentPage || 1}`;
-    const peopleResponse = await peopleService.getOne(query);
-    // const { page, usersPerPage, next } = peopleResponse;
-    console.log('PEOPLE RESPONSE: ', peopleResponse);
+    let fetched = [];
+    const peopleResponse = await peopleService.getOne(page);
     // If users remaining is undef, means it is the first run
-    // let remaining = usersRemaining || next;
     if (peopleResponse.data) {
-      parsePeopleResponse(peopleResponse.data).map(fetched.push);
+      const { results, next } = peopleResponse.data;
+      nextPage = next;
+      fetched = [...results];
     }
-    await asyncFetchAll([...peopleList, ...fetched], { currentPage: currentPage + 1, usersRemaining: next });
+    await asyncFetchAll([...peopleList, ...fetched], { currentPage: currentPage + 1, nextPage });
   } catch (error) {
     logger.error(`Error withing asyncFetchAll: ${error}`)
     Promise.reject(error);
@@ -29,8 +28,8 @@ const asyncFetchAll = async (peopleList, { currentPage = null, peopleRemaining =
 exports.getList = async (req, res) => {
   try {
     logger.info(`[PEOPLE] Request to: ${req.route.path} `);
-    const people = await asyncFetchAll([], {});
-    return res.json({ message: 'much people' });
+    const peopleList = await asyncFetchAll([], {});
+    return res.json({ data: { peopleList, count: peopleList.length } });
   } catch (error) {
     logger.error(`[PEOPLE]: Error within getList controller: ${error}`);
     return res.status(404).send({ message: error });
