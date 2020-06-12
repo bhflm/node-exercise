@@ -6,7 +6,7 @@
   "scripts": {
     "lint-c": "eslint \"**/*.js\"",
     "lint-fix": "eslint app --fix",
-    "run dev": "nodemon app.js",
+    "dev": "nodemon app.js",
     "test": "NODE_ENV=testing jest tests/app --runInBand --forceExit --verbose false"
   },
   "repository": {
