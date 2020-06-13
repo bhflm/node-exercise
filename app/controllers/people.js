@@ -12,7 +12,7 @@ const parsePeopleResponse = rawData =>
 exports.getList = async (req, res) => {
   try {
     logger.info(`[PEOPLE] Request to: ${req.route.path} `);
-    const peopleResponse = await peopleService.getOne(`?page=1`);
+    const peopleResponse = await peopleService.getOnePage(`?page=1`);
     if (peopleResponse.data) {
       const { count, results } = peopleResponse.data;
       const pagesAmount = calculateRemainingPages(count, results.length);
