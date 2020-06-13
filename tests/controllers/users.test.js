@@ -2,7 +2,6 @@ const request = require('supertest');
 const nock = require('nock');
 const Util = require('util');
 const server = require('../../app');
-const { mockEndpoint } = require('../utils');
 const peopleMock = require('../mocks/people');
 
 describe('People controller tests', () => {

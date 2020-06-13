@@ -1,13 +1,8 @@
 const Util = require('util');
 const logger = require('../logger');
-const peopleService = require('../services/people');
-const { calculateRemainingPages, buildPageQueriesArray } = require('../utils');
+const swapiService = require('../services/swapi');
+const { calculateRemainingPages, mapResponseData } = require('../utils');
 
-const parsePeopleResponse = rawData =>
-  rawData
-    .map(eachResponse => (eachResponse.data ? eachResponse.data.results : []))
-    .filter(each => each.length)
-    .flat();
 
 const isValidSort = value => ['height', 'mass', 'name'].includes(value);
 
@@ -26,16 +21,15 @@ const sortBy = (people, value) => {
 exports.getAll = async (req, res) => {
   try {
     logger.info(`[PEOPLE] Request to: ${req.route.path} `);
-    const peopleResponse = await peopleService.get(`?page=1`);
+    const peopleResponse = await swapiService.get('people', '?page=1');
     const { query } = req;
     if (peopleResponse.data) {
       const { count, results } = peopleResponse.data;
-      const pagesAmount = calculateRemainingPages(count, results.length);
-      const pagesLeft = buildPageQueriesArray(pagesAmount);
+      const pagesLeft = calculateRemainingPages(count, results.length);
       const remainingResponses = await Promise.all(
-        pagesLeft.map(currentPage => peopleService.get(currentPage))
+        pagesLeft.map(currentPage => swapiService.get('people', currentPage))
       );
-      let peopleList = parsePeopleResponse([peopleResponse, ...remainingResponses]);
+      let peopleList = mapResponseData([peopleResponse, ...remainingResponses]);
       if (isValidSort(query.sortBy)) {
         // Sort is working kinda weird
         peopleList = sortBy(peopleList, query.sortBy);

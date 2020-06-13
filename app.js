@@ -22,9 +22,7 @@ const init = () => {
 
   // Require routes into app
   routes.init(app);
-  if (ENVIRONMENT !== 'testing') {
-    app.listen(port);
-  }
+  app.listen(port);
 
   module.exports = app;
   logger.info(`[${ENVIRONMENT}]: RUNNING @ PORT:${port}`);
