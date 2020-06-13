@@ -10,8 +10,9 @@ const mockEndpoint = ({ route, query }, statusCode, responseObj) =>
     .reply(statusCode, responseObj);
 
 describe('[SERVICE]: People tests', () => {
+  let params = { route: 'people', query: '' };
   test('Get valid page returns people', () => {
-    const params = { route: 'people', query: '?page=1' };
+    params = { route: 'people', query: '?page=1' };
     const endpoint = mockEndpoint(params, 200, peopleMock.onePage);
     return swapiService.get(params).then(obj => {
       expect(obj.data).toHaveProperty('count');
@@ -21,14 +22,14 @@ describe('[SERVICE]: People tests', () => {
     });
   });
   test('Get invalid page returns 404', () => {
-    const params = { route: 'people', query: '?page=1000000' };
+    params = { route: 'people', query: '?page=1000000' };
     const endpoint = mockEndpoint(params, 404, {});
     return swapiService.get(params).then(obj => {
       expect(obj.response.status).toBe(404);
     });
   });
   test('Get last page returns people, but no next page ref', () => {
-    const params = { route: 'people', query: '?page=9' };
+    params = { route: 'people', query: '?page=9' };
     const endpoint = mockEndpoint(params, 200, peopleMock.lastPage);
     return swapiService.get(params).then(obj => {
       expect(obj.data).toHaveProperty('count');
