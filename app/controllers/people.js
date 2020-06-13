@@ -23,17 +23,17 @@ const sortBy = (people, value) => {
   return sorted;
 };
 
-exports.getList = async (req, res) => {
+exports.getAll = async (req, res) => {
   try {
     logger.info(`[PEOPLE] Request to: ${req.route.path} `);
-    const peopleResponse = await peopleService.getOnePage(`?page=1`);
+    const peopleResponse = await peopleService.get(`?page=1`);
     const { query } = req;
     if (peopleResponse.data) {
       const { count, results } = peopleResponse.data;
       const pagesAmount = calculateRemainingPages(count, results.length);
       const pagesLeft = buildPageQueriesArray(pagesAmount);
       const remainingResponses = await Promise.all(
-        pagesLeft.map(currentPage => peopleService.getOnePage(currentPage))
+        pagesLeft.map(currentPage => peopleService.get(currentPage))
       );
       let peopleList = parsePeopleResponse([peopleResponse, ...remainingResponses]);
       if (isValidSort(query.sortBy)) {
@@ -44,7 +44,7 @@ exports.getList = async (req, res) => {
     }
     return res.json({ message: 'No data found ' });
   } catch (error) {
-    logger.error(`[PEOPLE]: Error within getList controller: ${error}`);
+    logger.error(`[PEOPLE]: Error within getAll controller: ${error}`);
     return res.status(404).send(error);
   }
 };
