@@ -7,7 +7,7 @@
     "lint-c": "eslint \"**/*.js\"",
     "lint-fix": "eslint app --fix",
     "dev": "nodemon app.js",
-    "test": "NODE_ENV=testing jest tests/app --runInBand --forceExit --verbose false"
+    "test": "NODE_ENV=testing jest tests/app --runInBand --detectOpenHandles --verbose false"
   },
   "repository": {
     "type": "git",
