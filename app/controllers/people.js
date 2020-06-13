@@ -9,19 +9,37 @@ const parsePeopleResponse = rawData =>
     .filter(each => each.length)
     .flat();
 
+const isValidSort = value => ['height', 'mass', 'name'].includes(value);
+
+const sortBy = (people, value) => {
+  let sorted = [];
+  if (value === 'name') {
+    sorted = people.sort((a, b) => (a[value].toLowerCase() < b[value].toLowerCase() ? -1 : 1));
+  }
+  else {
+    // assert 'Height' or 'Mass' to Number in order to avoid string comparison
+    sorted = people.sort((a, b) => Number(a[value]) - Number(b[value]));
+  }
+  return sorted;
+};
+
 exports.getList = async (req, res) => {
   try {
     logger.info(`[PEOPLE] Request to: ${req.route.path} `);
     const peopleResponse = await peopleService.getOnePage(`?page=1`);
+    const { query } = req;
     if (peopleResponse.data) {
       const { count, results } = peopleResponse.data;
       const pagesAmount = calculateRemainingPages(count, results.length);
       const pagesLeft = buildPageQueriesArray(pagesAmount);
-      // ** See comment above controller regarding the use of Promise.all
       const remainingResponses = await Promise.all(
         pagesLeft.map(currentPage => peopleService.getOnePage(currentPage))
       );
-      const peopleList = parsePeopleResponse([peopleResponse, ...remainingResponses]);
+      let peopleList = parsePeopleResponse([peopleResponse, ...remainingResponses]);
+      if (isValidSort(query.sortBy)) {
+        // Sort is working kinda weird
+        peopleList = sortBy(peopleList, query.sortBy);
+      }
       return res.json({ data: peopleList, count: peopleList.length });
     }
     return res.json({ message: 'No data found ' });
@@ -30,8 +48,3 @@ exports.getList = async (req, res) => {
     return res.status(404).send(error);
   }
 };
-
-// 20. As Promise.all fails as soon as one promise is rejected, using it a real world project could be
-// really dangerous because you're risking to lose data that was already fetched.
-// But for the scope for the project i decided it was good enough to asume the
-// external API was stable enough, and keep it simple to do what the task for `/people` requested.
