@@ -21,13 +21,13 @@ const sortBy = (people, value) => {
 exports.getAll = async (req, res) => {
   try {
     logger.info(`[PEOPLE] Request to: ${req.route.path} `);
-    const peopleResponse = await swapiService.get('people', '?page=1');
+    const peopleResponse = await swapiService.get({ route: 'people', query: '?page=1' });
     const { query } = req;
     if (peopleResponse.data) {
       const { count, results } = peopleResponse.data;
       const pagesLeft = calculateRemainingPages(count, results.length);
       const remainingResponses = await Promise.all(
-        pagesLeft.map(currentPage => swapiService.get('people', currentPage))
+        pagesLeft.map(currentPage => swapiService.get({ route: 'people', query: currentPage }))
       );
       let peopleList = mapResponseData([peopleResponse, ...remainingResponses]);
       if (isValidSort(query.sortBy)) {
