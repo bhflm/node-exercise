@@ -13,7 +13,7 @@ const sortBy = (people, value) => {
   }
   else {
     // assert 'Height' or 'Mass' to Number in order to avoid string comparison
-    sorted = people.sort((a, b) => Number(a[value]) - Number(b[value]));
+    sorted = people.sort((a, b) => (Number(a[value]) || 0) - Number(b[value] || 0));
   }
   return sorted;
 };
