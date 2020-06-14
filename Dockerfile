@@ -5,7 +5,6 @@ WORKDIR /usr/src/app
 
 # Installing dependencies
 
-COPY .npmrc .npmrc
 COPY package*.json ./
 RUN npm install
 RUN rm -f .npmrc
