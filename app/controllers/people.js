@@ -31,7 +31,6 @@ exports.getAll = async (req, res) => {
       );
       let peopleList = mapResponseData([peopleResponse, ...remainingResponses]);
       if (isValidSort(query.sortBy)) {
-        // Sort is working kinda weird
         peopleList = sortBy(peopleList, query.sortBy);
       }
       return res.json({ data: peopleList, count: peopleList.length });
