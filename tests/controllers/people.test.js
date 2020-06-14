@@ -1,6 +1,5 @@
 const request = require('supertest');
 const nock = require('nock');
-const Util = require('util');
 const server = require('../../app');
 const peopleMock = require('../mocks/people');
 

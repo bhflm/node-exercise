@@ -10,17 +10,18 @@ const getResident = resident =>
     .then(response => response.data)
     .catch(err => {});
 
-const getResidentsData = residents => Promise.all(residents.map(resident => getResident(resident)));
+const getResidentsData = residents =>
+  Promise.all(residents.map(resident => getResident(resident)));
 
 exports.getAll = async (req, res) => {
   try {
     logger.info(`[PLANETS] Request to: ${req.route.path} `);
-    const response = await swapiService.get(`?page=1`);
+    const response = await swapiService.get({ route: 'planets', query: '?page=1' });
     if (response.data) {
       const { count, results } = response.data;
       const pagesLeft = calculateRemainingPages(count, results.length);
       const remainingResponses = await Promise.all(
-        pagesLeft.map(currentPage => swapiService.get(currentPage))
+        pagesLeft.map(currentPage => swapiService.get({ route: 'planets', query: currentPage }))
       );
       const planetsData = mapResponseData([response, ...remainingResponses])
       const planetsWithResidentsData = await Promise.all(
@@ -30,7 +31,7 @@ exports.getAll = async (req, res) => {
         })
         )
       );
-      return res.json({ data: planetsWithResidentsData });
+      return res.json({ data: planetsWithResidentsData, count: planetsWithResidentsData.length });
     }
     return res.json({ message: 'No resources found ' });
   } catch (error) {
