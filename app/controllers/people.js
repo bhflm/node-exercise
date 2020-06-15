@@ -4,6 +4,12 @@ const swapiService = require('../services/swapi');
 const { calculateRemainingPages, mapResponseData } = require('../utils');
 
 
+const formatNumber = value => {
+  // Remove thousand comma separator from numbers to in order to avoid formatting issues
+  const formatted = value.replace(',', '');
+  return Number(formatted);
+};
+
 const isValidSort = value => ['height', 'mass', 'name'].includes(value);
 
 const sortBy = (people, value) => {
@@ -13,7 +19,7 @@ const sortBy = (people, value) => {
   }
   else {
     // assert 'Height' or 'Mass' to Number in order to avoid string comparison
-    sorted = people.sort((a, b) => (Number(a[value]) || 0) - Number(b[value] || 0));
+    sorted = people.sort((a, b) => (formatNumber(a[value]) || 0) - formatNumber(b[value] || 0));
   }
   return sorted;
 };
