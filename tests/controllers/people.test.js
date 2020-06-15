@@ -10,7 +10,7 @@ const extractNumberValue = value => {
   return Number(value.replace(',', ''));
 };
 
-describe.only('People controller tests', () => {
+describe('People controller tests', () => {
   const defaultTimeout = 100000;
   test(
     'status is 200 with no sortBy',
