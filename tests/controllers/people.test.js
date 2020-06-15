@@ -6,10 +6,11 @@ const peopleMock = require('../mocks/people');
 const extractNumberValue = value => {
   // unknown is mapped as 0 for avoiding NaN and correct comparison
   if (value === 'unknown') return 0;
-  return Number(value);
+  // Handle properly comma separated numbers
+  return Number(value.replace(',', ''));
 };
 
-describe('People controller tests', () => {
+describe.only('People controller tests', () => {
   const defaultTimeout = 100000;
   test(
     'status is 200 with no sortBy',
