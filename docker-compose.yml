@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  app:
+    # Build dockerfile from current directory
+    build: .
+    command: echo 'App ready'
+    # Map host port to container
+    ports: 
+      - 8000:8080
+    # We can even send a couple of env values!
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+    command:
+      sh -c 'node app.js'
