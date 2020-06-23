@@ -15,4 +15,5 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=8080
-    command: echo 'Done'
+    command:
+      sh -c 'node app.js'
